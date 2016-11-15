@@ -98,22 +98,27 @@ public class JSONObject extends JSON implements Map<String, Object>, Cloneable, 
       return Integer.MAX_VALUE; // any large value
     }
     
+    @Override
     public int size() {
         return map.size();
     }
-
+    
+    @Override
     public boolean isEmpty() {
         return map.isEmpty();
     }
-
+    
+    @Override
     public boolean containsKey(Object key) {
         return map.containsKey(key);
     }
-
+    
+    @Override
     public boolean containsValue(Object value) {
         return map.containsValue(value);
     }
-
+    
+    @Override
     public Object get(Object key) {
         return map.get(key);
     }
