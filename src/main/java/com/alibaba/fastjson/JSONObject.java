@@ -67,18 +67,37 @@ public class JSONObject extends JSON implements Map<String, Object>, Cloneable, 
         this(DEFAULT_INITIAL_CAPACITY, ordered);
     }
 
-    public JSONObject(int initialCapacity){
-        this(initialCapacity, false);
+    public JSONObject(int expectedSize){
+        this(expectedSize, false);
     }
 
-    public JSONObject(int initialCapacity, boolean ordered){
+    public JSONObject(int expectedSize, boolean ordered){
         if (ordered) {
-            map = new LinkedHashMap<String, Object>(initialCapacity);
+            map = new LinkedHashMap<String, Object>(capacity(expectedSize));
         } else {
-            map = new HashMap<String, Object>(initialCapacity);
+            map = new HashMap<String, Object>(capacity(expectedSize));
         }
     }
-
+    
+    /**
+     * Returns a capacity that is sufficient to keep the map from being resized as
+     * long as it grows no larger than expectedSize and the load factor is >= its
+     * default (0.75).
+     * copy form google guava Maps
+     */
+    static int capacity(int expectedSize) {
+      if (expectedSize < 3) {
+          if (expectedSize < 0) {
+              throw new IllegalArgumentException("expectedSize cannot be negative but was: " + expectedSize);
+            }
+        return expectedSize + 1;
+      }
+      if (expectedSize < 1 << (Integer.SIZE - 2)) {
+        return expectedSize + expectedSize / 3;
+      }
+      return Integer.MAX_VALUE; // any large value
+    }
+    
     public int size() {
         return map.size();
     }
